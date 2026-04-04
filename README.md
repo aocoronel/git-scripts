@@ -10,6 +10,34 @@ In the current days, relying on the many git remote providers is not really a gr
 
 This is a simple approach without dependence on anything else but `ssh` and `git`, so that we can have a local server in each of our devices to pull and push, and than truly synchronize using the bare repositories.
 
+Nonetheless, this is more of a workflow, rather than any tool. See a scheme of what I mean.
+
+```console
+        ┌──────────────────────┐
+        │   Device 1 Repos     │
+        │  /home/.../repos     │
+        └─────────┬────────────┘
+                  │ Device 1 -> push (git push local)
+                  ▼
+        ┌──────────────────────┐
+        │  Device 1 Git Server │
+        │  /home/.../server    │
+        └─────────┬────────────┘
+                  │ Device 2 -> network (ssh / git pull)
+                  ▼
+        ┌──────────────────────┐
+        │    Device 2 Repos    │
+        │  ~/git/repos/...     │
+        └─────────┬────────────┘
+                  │ Device 2 -> push (git push local)
+                  ▼
+        ┌──────────────────────┐
+        │ Device 2 Git Server  │
+        │   (local remote)     │
+        └──────────────────────┘
+                   Device 1 -> network (ssh / git pull)
+```
+
 ## Scripts
 
 `sync.sh`

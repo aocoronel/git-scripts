@@ -11,12 +11,14 @@ if [ "$current" = "desktop" ]; then
   GIT_REPO="${desktop_home}/git"
 
   TARGET="phone"
+  TARGET_GIT="${phone_home}/git/"
   TARGET_GIT_REPOS="${phone_home}/git/repos"
   TARGET_GIT_SERVER="${phone_home}/git/server"
 elif [ "$current" = "phone" ]; then
-  GIT_REPO="${phone}/git"
+  GIT_REPO="${phone_home}/git"
 
   TARGET="desktop"
+  TARGET_GIT="${desktop_home}/git/"
   TARGET_GIT_REPOS="${desktop_home}/git/repos"
   TARGET_GIT_SERVER="${desktop_home}/git/server"
 fi
