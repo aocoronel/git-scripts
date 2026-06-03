@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-current=$(sh ./ini_parser.sh get current repo.ini)
-server_home=$(sh ./ini_parser.sh get server repo.ini)
-client_home=$(sh ./ini_parser.sh get client repo.ini)
-server_name=$(sh ./ini_parser.sh get server_name repo.ini)
-client_name=$(sh ./ini_parser.sh get client_name repo.ini)
+. ./ini_parser.sh
+
+current=$(get current repo.ini)
+server_home=$(get server repo.ini)
+client_home=$(get client repo.ini)
+server_name=$(get server_name repo.ini)
+client_name=$(get client_name repo.ini)
 
 if [ "$current" = "client" ]; then
   GIT_REPO="${client_home}/git"
