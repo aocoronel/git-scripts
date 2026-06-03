@@ -10,6 +10,8 @@ In the current days, relying on the many git remote providers is not really a gr
 
 This is a simple approach without dependence on anything else but `ssh` and `git`, so that we can have a git server in one device and them work with it.
 
+You are encouraged to read all scripts.
+
 ## Standalone Scripts
 
 `bulk.sh`
