@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
 
+dir=$1
+
+if [ -z $dir ]; then
+  echo "bulk: directory not provided"
+  exit 1
+fi
+
+shift
+
 cwd=$(pwd)
 
 [ -z "$1" ] && {
-  printf "bulk.sh [command]"
+  echo "bulk: command not provided"
   exit 1
 }
 
 files=()
-for repo in "$cwd/"*/; do
+for repo in "$cwd/$dir"*/; do
   [ -d "$repo" ] || continue
 
   info "git -C $repo $@"

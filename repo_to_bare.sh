@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
+dir=$1
+
+if [ -z $dir ]; then
+  echo "repo_to_bare: directory not provided"
+  exit 1
+fi
+
 cwd=$(pwd)
 
 files=()
-for repo in "$cwd/"*/; do
+for repo in "$cwd/$dir"*/; do
   [ -d "$repo" ] || continue
   git clone  "$repo" "${GIT_SERVER}/$(basename "$repo")" --bare || info "Already cloned"
 done
