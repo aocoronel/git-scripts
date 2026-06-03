@@ -3,13 +3,29 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 . "$SCRIPT_DIR/vars.sh"
 
-while getopts ":-f" opt; do
+usage() {
+  echo "mirror_to [OPTIONS]"
+  echo
+  echo "Options:"
+  echo "  -h        Display this message and exits"
+  echo "  -f        Use --delete in rsync"
+  echo "  -p [PORT] Port to access over ssh"
+}
+
+while getopts ":-fp:" opt; do
   case "$opt" in
   -)
     break
     ;;
+  h)
+    usage
+    exit 0
+    ;;
   f)
     FORCE=1
+    ;;
+  p)
+    PORT=$OPTARG
     ;;
   ?)
     echo "Error: Invalid option '-$OPTARG'" >&2
@@ -26,8 +42,8 @@ else
   OPERATION=update
 fi
 
-if [[ "$(uname -a)" =~ "Android" ]]; then
-  rsync -avzrPl --"$OPERATION" "$GIT_REPO" "desktop:$TARGET_GIT"
+if [ -n "$PORT" ]; then
+  rsync -e "ssh -p ${PORT}" -avzrPl --"$OPERATION" "$GIT_REPO" "$REMOTE_NAME:$TARGET_GIT"
 else
-  rsync -e 'ssh -p 8022' -avzrPl --"$OPERATION" "$GIT_REPO" "phone:$TARGET_GIT"
+  rsync -avzrPl --"$OPERATION" "$GIT_REPO" "$REMOTE_NAME:$TARGET_GIT"
 fi
