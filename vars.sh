@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-COLLECTION=git.repos
-touch "${COLLECTION}"
-
 current=$(sh ./ini_parser.sh get current repo.ini)
 server_home=$(sh ./ini_parser.sh get server repo.ini)
 client_home=$(sh ./ini_parser.sh get client repo.ini)

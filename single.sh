@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-. "$SCRIPT_DIR/vars.sh"
+cwd=$(pwd)
 
 [ -z "$1" ] && {
   printf "bulk.sh [command]"
@@ -13,5 +12,5 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
   exit 1
 }
 
-info "git -C ${GIT_REPOS}/$@"
-git -C "${GIT_REPOS}/$@"
+info "git -C ${cwd}/$@"
+git -C "${cwd}/$@"

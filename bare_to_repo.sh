@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-. "$SCRIPT_DIR/vars.sh"
+cwd=$(pwd)
 
 files=()
-for repo in "$GIT_SERVER/"*/; do
+for repo in "$cwd/"*/; do
   [ -d "$repo" ] || continue
-  git clone "${repo}" "${GIT_REPOS}/$(basename "$repo")" || info "Already cloned"
+  git clone "${repo}" "${cwd}/$(basename "$repo")" || info "Already cloned"
 done

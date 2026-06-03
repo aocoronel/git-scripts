@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-. "$SCRIPT_DIR/vars.sh"
+cwd=$(pwd)
 
 [ -z "$1" ] && {
   printf "bulk.sh [command]"
@@ -9,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 }
 
 files=()
-for repo in "$GIT_REPOS/"*/; do
+for repo in "$cwd/"*/; do
   [ -d "$repo" ] || continue
 
   info "git -C $repo $@"

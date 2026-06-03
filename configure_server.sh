@@ -5,13 +5,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 
 files=()
 for repo in "$GIT_REPOS/"*/; do
-  url=$(git --git-dir="$repo" config --get "remote.local.url" || true)
+  url=$(git --git-dir="$repo" config --get "remote.server.url" || true)
 
   name=$(basename "$repo" /)
   expected="${GIT_SERVER}/${name}"
 
   if [[ "$url" != "$expected" ]]; then
-    info "Configuring $repo to local remote"
-    git -C "$repo" config set "remote.local.url" "${GIT_SERVER}/${name}"
+    info "Configuring $repo to local server"
+    git -C "$repo" config set "remote.server.url" "${GIT_SERVER}/${name}"
   fi
 done

@@ -8,45 +8,9 @@ Note this is somewhat personal, so you will have to tweak it a little bit before
 
 In the current days, relying on the many git remote providers is not really a great deal, specially if you want to host some more sensitive data or code, which should have the least breaches as possible. This is specially true with proprietary providers, which you already know that uses your data for training AI, house holding your private data without consent and so on.
 
-This is a simple approach without dependence on anything else but `ssh` and `git`, so that we can have a local server in each of our devices to pull and push, and than truly synchronize using the bare repositories.
+This is a simple approach without dependence on anything else but `ssh` and `git`, so that we can have a git server in one device and them work with it.
 
-Nonetheless, this is more of a workflow, rather than any tool. See a scheme of what I mean.
-
-```console
-        ┌──────────────────────┐
-        │   Device 1 Repos     │
-        │  /home/.../repos     │
-        └─────────┬────────────┘
-                  │ Device 1 -> push (git push local)
-                  ▼
-        ┌──────────────────────┐
-        │  Device 1 Git Server │
-        │  /home/.../server    │
-        └─────────┬────────────┘
-                  │ Device 2 -> network (ssh / git pull)
-                  ▼
-        ┌──────────────────────┐
-        │    Device 2 Repos    │
-        │  ~/git/repos/...     │
-        └─────────┬────────────┘
-                  │ Device 2 -> push (git push local)
-                  ▼
-        ┌──────────────────────┐
-        │ Device 2 Git Server  │
-        │   (local remote)     │
-        └──────────────────────┘
-                   Device 1 -> network (ssh / git pull)
-```
-
-## Scripts
-
-`sync.sh`
-
-Configures `remote.origin.url` for bare repositories only.
-
-`clone.sh`
-
-Clones all repositories listed in `git.repos`.
+## Standalone Scripts
 
 `bulk.sh`
 
@@ -66,39 +30,21 @@ Makes a normal repository from a bare.
 
 ## How to use
 
-In `vars.sh` you will have to modify these lines:
-
-```bash
-current=$(sh ./ini_parser.sh get current repo.ini)
-phone_home=$(sh ./ini_parser.sh get phone repo.ini)
-desktop_home=$(sh ./ini_parser.sh get desktop repo.ini)
-
-if [ "$current" = "desktop" ]; then
-  GIT_REPO="${desktop_home}/git"
-
-  TARGET="phone"
-  TARGET_GIT_REPOS="${phone_home}/git/repos"
-  TARGET_GIT_SERVER="${phone_home}/git/server"
-elif [ "$current" = "phone" ]; then
-  GIT_REPO="${phone}/git"
-
-  TARGET="desktop"
-  TARGET_GIT_REPOS="${desktop_home}/git/repos"
-  TARGET_GIT_SERVER="${desktop_home}/git/server"
-fi
-```
-
-The changes will have to reflect what you configure in `repo.ini`. For instance it's like this:
+You will have to configure `repo.ini` before using. The `client_name` and `server_name` are assumed to be defined in your ssh `.config` file.
 
 ```ini
-current=desktop
-desktop=/home/aoc
-phone=/data/data/com.termux/files/home
+current=client
+
+# Absolute path
+client=/home/aoc/.secrets/unencrypted
+server=/data/data/com.termux/files/home
+
+client_name=desktop
+server_name=phone
 ```
 
-You can rename "desktop" and "phone" to whatever you want, and they are primary entries to your ssh configuration file
-
 ```ssh
+# .ssh/config
 Host desktop
     User username
     HostName <IP ADDRESS / LOCAL ADDRESS>
@@ -110,54 +56,9 @@ Host phone
     IdentityFile ~/.ssh/id_rsa
 ```
 
-After you have setup this, you can start using it. Take all your cloned repositories and place them into your `~/git/repos`. Also take this opportunity to fill the `git.repos` file, for example:
+After that, in your server, you must turn all repositories into a bare repository using the `repo_to_bare.sh`, which will create them in `~/git/server`. Then you can use `configure_server` to add a `server` remote in all repositories in `./repos` to your own server, and `configure_remote` to do the same.
 
-```txt
-neostow-c
-neostow-rs
-neostow-sh
-```
-
-After that, you must turn all repositories into a bare repository using the `repo_to_bare.sh`, which will create them in `~/git/server`. And finally you have to configure all bare repositories to use your second device with the `sync.sh` script.
-
-Taking the example you don't have any repository in your second device, you can clone all of these scripts to it. Here, we assume you have your `git.repos` already, so then you can call the `clone.sh` script which will clone all bare repositories from your first device into `~/git/repos`, and so you can repeat the `repo_to_bare.sh` process.
-
-Once you have the two devices with the same repositories in place, you can work in the `~/git/repos` and push/merge/rebase locally with your server, and once you are ready to sync, you push from the bare repository to your second device bare repository and pull afterwards from your normal repository.
-
-Visually digested bash for the lazy:
-
-```bash
-# Device 1
-
-# Move repositories to ~/git/repos
-mv ~/dev/repos/* ~/git/repos/
-
-# Setup your git.repos
-for filename in */; do echo "$filename" >> git.repos; done
-
-# Generate the bare repos
-bash ./repo_to_bare.sh.sh
-
-# Configure repos to point to your second device
-bash ./sync.sh
-
-# Device 2
-
-# sftp get git.repos
-
-# Clone all repos from device 1
-bash ./clone.sh
-
-# Don't forget to update your repo.ini
-
-# Generate the bare repos
-bash ./repo_to_bare.sh
-
-# Configure repos to point to your second device
-bash ./sync.sh
-
-# Done
-```
+After that you can operate as usual. To interact with your server you would do: `git fetch server`, `git push server`...
 
 # License
 
