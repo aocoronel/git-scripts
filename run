@@ -16,7 +16,6 @@ cwd=$(pwd)
   exit 1
 }
 
-files=()
 for repo in "$cwd/$dir"*/; do
   [ -d "$repo" ] || continue
 
