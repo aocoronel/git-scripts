@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-. ./ini_parser.sh
+get() {
+  shift
+  sed -n "s|^$1=||p" $2
+}
 
 current=$(get current repo.ini)
 server_home=$(get server repo.ini)
