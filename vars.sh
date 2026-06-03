@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 get() {
-  shift
   sed -n "s|^$1=||p" $2
 }
 
