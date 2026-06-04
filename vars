@@ -9,20 +9,21 @@ server_home=$(get server repo.ini)
 client_home=$(get client repo.ini)
 server_name=$(get server_name repo.ini)
 client_name=$(get client_name repo.ini)
+git_repo=$(get git_repo repo.ini)
 
 if [ "$current" = "client" ]; then
-  GIT_REPO="${client_home}/git"
+  GIT_REPO="${client_home}/${git_repo}"
   TARGET="server"
-  TARGET_GIT="${server_home}/git/"
-  TARGET_GIT_REPOS="${server_home}/git/repos"
-  TARGET_GIT_SERVER="${server_home}/git/server"
+  TARGET_GIT="${server_home}/${git_repo}/"
+  TARGET_GIT_REPOS="${server_home}/${git_repo}/repos"
+  TARGET_GIT_SERVER="${server_home}/${git_repo}/server"
   REMOTE_NAME="${server_name}"
 elif [ "$current" = "server" ]; then
-  GIT_REPO="${server_home}/git"
+  GIT_REPO="${server_home}/${git_repo}"
   TARGET="client"
-  TARGET_GIT="${client_home}/git/"
-  TARGET_GIT_REPOS="${client_home}/git/repos"
-  TARGET_GIT_SERVER="${client_home}/git/server"
+  TARGET_GIT="${client_home}/${git_repo}/"
+  TARGET_GIT_REPOS="${client_home}/${git_repo}/repos"
+  TARGET_GIT_SERVER="${client_home}/${git_repo}/server"
   REMOTE_NAME="${client_name}"
 fi
 
