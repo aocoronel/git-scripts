@@ -18,6 +18,8 @@ cwd=$(pwd)
   exit 1
 }
 
+set +x
+
 for repo in "$cwd/$dir"*/; do
   [ -d "$repo" ] || continue
 

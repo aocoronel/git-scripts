@@ -3,8 +3,6 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 . "$SCRIPT_DIR/vars"
 
-set -x
-
 for repo in "$GIT_REPOS/"*/; do
   url=$(git --git-dir="$repo" config --get "remote.server.url" || true)
 
