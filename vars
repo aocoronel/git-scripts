@@ -11,6 +11,31 @@ server_name=$(get server_name repo.ini)
 client_name=$(get client_name repo.ini)
 git_repo=$(get git_repo repo.ini)
 
+[ -z $current ] && {
+  echo "vars: current not set"
+  exit 1
+}
+[ -z $server_home ] && {
+  echo "vars: server_home not set"
+  exit 1
+}
+[ -z $client_home ] && {
+  echo "vars: client_home not set"
+  exit 1
+}
+[ -z $server_name ] && {
+  echo "vars: server_name not set"
+  exit 1
+}
+[ -z $client_name ] && {
+  echo "vars: client_name not set"
+  exit 1
+}
+[ -z $git_repo ] && {
+  echo "vars: git_repo not set"
+  exit 1
+}
+
 if [ "$current" = "client" ]; then
   GIT_REPO="${client_home}/${git_repo}"
   TARGET="server"
