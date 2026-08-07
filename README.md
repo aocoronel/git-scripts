@@ -64,4 +64,4 @@ After that you can operate as usual. To interact with your server you would do: 
 
 # License
 
-This repository is licensed under the Unlicense license.
+This project is available as public-domain under the CC0 License.
